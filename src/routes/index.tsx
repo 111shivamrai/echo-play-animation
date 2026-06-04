@@ -182,6 +182,12 @@ function Index() {
 
         <style>{`
           @keyframes spin { from { transform: rotate(0) } to { transform: rotate(360deg) } }
+          @keyframes shipOut {
+            0% { transform: translateX(0); opacity: 0 }
+            10% { opacity: 1 }
+            90% { opacity: 1 }
+            100% { transform: translateX(420%); opacity: 0 }
+          }
           @keyframes ovenPulse { 0%,100% { opacity:.4 } 50% { opacity:.95 } }
           @keyframes press {
             0%,100% { transform: translateY(0) }
