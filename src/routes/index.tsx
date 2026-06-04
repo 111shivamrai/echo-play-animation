@@ -1,12 +1,12 @@
 import { createFileRoute } from "@tanstack/react-router";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import factoryAsset from "@/assets/factory.png.asset.json";
 
 export const Route = createFileRoute("/")({
   head: () => ({
     meta: [
       { title: "Muffin Factory" },
-      { name: "description", content: "Run your muffin factory floor." },
+      { name: "description", content: "An always-running muffin factory floor." },
     ],
   }),
   component: Index,
@@ -14,103 +14,64 @@ export const Route = createFileRoute("/")({
 
 type Stage = "mixer" | "baker" | "icer" | "packer";
 const STAGES: Stage[] = ["mixer", "baker", "icer", "packer"];
-
-// Horizontal % position of each machine output on the belt
-const STAGE_X: Record<Stage, number> = {
-  mixer: 14,
-  baker: 30,
-  icer: 50,
-  packer: 66,
-};
-
-const STAGE_TIME = 1500; // ms per stage to process
-const PRICE = 12; // revenue per packed muffin
-const DEMAND_PER_SEC = 1.2; // target throughput
+const STAGE_X: Record<Stage, number> = { mixer: 14, baker: 30, icer: 50, packer: 66 };
+const STAGE_TIME = 1500;
+const PRICE = 12;
 
 type Batch = {
   id: number;
   stage: Stage;
-  // 0..1 progress within the current stage's processing time
   progress: number;
-  // when true, batch is ready to advance / moving on the belt
   moving: boolean;
-  beltX: number; // % across belt while moving
+  beltX: number;
 };
 
 function Index() {
-  const [on, setOn] = useState<Record<Stage, boolean>>({
-    mixer: true,
-    baker: true,
-    icer: true,
-    packer: true,
-  });
   const [batches, setBatches] = useState<Batch[]>([]);
   const [produced, setProduced] = useState(0);
-  const [demand, setDemand] = useState(0);
   const [revenue, setRevenue] = useState(0);
   const idRef = useRef(1);
   const lastSpawn = useRef(0);
   const lastTick = useRef(performance.now());
 
-  // Main game loop
   useEffect(() => {
     let raf = 0;
     const loop = (now: number) => {
       const dt = Math.min(100, now - lastTick.current);
       lastTick.current = now;
 
-      // grow demand over time
-      setDemand((d) => d + (DEMAND_PER_SEC * dt) / 1000);
-
       setBatches((prev) => {
         const next: Batch[] = [];
         let producedDelta = 0;
-
-        // Track whether next stage already has a batch processing (simple capacity = 1)
-        const occupied: Record<Stage, boolean> = {
-          mixer: false,
-          baker: false,
-          icer: false,
-          packer: false,
-        };
+        const occupied: Record<Stage, boolean> = { mixer: false, baker: false, icer: false, packer: false };
         for (const b of prev) if (!b.moving) occupied[b.stage] = true;
 
         for (const b of prev) {
           if (b.moving) {
-            // travel on belt toward next stage target X
-            const targetStage = nextStage(b.stage);
-            const targetX = targetStage ? STAGE_X[targetStage] : 95;
-            const speed = 18; // % per second
-            const nx = b.beltX + (speed * dt) / 1000;
+            const target = nextStage(b.stage);
+            const targetX = target ? STAGE_X[target] : 95;
+            const nx = b.beltX + (18 * dt) / 1000;
             if (nx >= targetX) {
-              if (!targetStage) {
-                // exited factory — packed muffin shipped
+              if (!target) {
                 producedDelta += 1;
                 continue;
               }
-              if (!occupied[targetStage]) {
-                occupied[targetStage] = true;
-                next.push({ ...b, stage: targetStage, moving: false, progress: 0, beltX: targetX });
+              if (!occupied[target]) {
+                occupied[target] = true;
+                next.push({ ...b, stage: target, moving: false, progress: 0, beltX: targetX });
               } else {
-                // wait at target
                 next.push({ ...b, beltX: targetX });
               }
             } else {
               next.push({ ...b, beltX: nx });
             }
           } else {
-            // processing at current stage (only if machine ON)
-            if (on[b.stage]) {
-              const p = b.progress + dt / STAGE_TIME;
-              if (p >= 1) {
-                // try to release onto belt
-                next.push({ ...b, progress: 1, moving: true, beltX: STAGE_X[b.stage] });
-                occupied[b.stage] = false;
-              } else {
-                next.push({ ...b, progress: p });
-              }
+            const p = b.progress + dt / STAGE_TIME;
+            if (p >= 1) {
+              next.push({ ...b, progress: 1, moving: true, beltX: STAGE_X[b.stage] });
+              occupied[b.stage] = false;
             } else {
-              next.push(b); // stalled
+              next.push({ ...b, progress: p });
             }
           }
         }
@@ -120,12 +81,10 @@ function Index() {
           setRevenue((v) => v + producedDelta * PRICE);
         }
 
-        // Spawn new batches into mixer
         lastSpawn.current += dt;
-        const spawnEvery = 1100;
-        if (lastSpawn.current >= spawnEvery) {
+        if (lastSpawn.current >= 1100) {
           lastSpawn.current = 0;
-          if (on.mixer && !next.some((b) => b.stage === "mixer" && !b.moving)) {
+          if (!next.some((b) => b.stage === "mixer" && !b.moving)) {
             next.push({
               id: idRef.current++,
               stage: "mixer",
@@ -135,7 +94,6 @@ function Index() {
             });
           }
         }
-
         return next;
       });
 
@@ -143,10 +101,7 @@ function Index() {
     };
     raf = requestAnimationFrame(loop);
     return () => cancelAnimationFrame(raf);
-  }, [on]);
-
-  const fillRate = demand > 0 ? Math.min(100, (produced / demand) * 100) : 100;
-  const allOn = STAGES.every((s) => on[s]);
+  }, []);
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-slate-900 p-4">
@@ -161,18 +116,16 @@ function Index() {
           draggable={false}
         />
 
-        {/* Status pill — top right */}
+        {/* Status pill */}
         <div
           className="absolute flex items-center gap-1.5 rounded-full bg-black/55 px-2 py-1 text-[10px] font-bold text-white sm:text-xs"
           style={{ right: "2%", top: "2.5%" }}
         >
-          <span
-            className={`h-2 w-2 rounded-full ${allOn ? "bg-green-400 shadow-[0_0_8px_2px_rgba(74,222,128,0.7)]" : "bg-red-400"}`}
-          />
-          {allOn ? "ALL SYSTEMS NORMAL" : "SYSTEM HALTED"}
+          <span className="h-2 w-2 animate-pulse rounded-full bg-green-400 shadow-[0_0_8px_2px_rgba(74,222,128,0.7)]" />
+          ALL SYSTEMS NORMAL
         </div>
 
-        {/* Production counter — top right under status */}
+        {/* Production counter */}
         <div
           className="absolute rounded-md bg-emerald-900/85 px-2 py-1 text-right font-mono text-white shadow"
           style={{ right: "2%", top: "9%", minWidth: "84px" }}
@@ -183,30 +136,79 @@ function Index() {
           </div>
         </div>
 
-        {/* Machine status overlays — show processing flash */}
-        {STAGES.map((s) => {
-          const processing = batches.some((b) => b.stage === s && !b.moving && on[s]);
-          return (
-            <div
-              key={s}
-              className="pointer-events-none absolute rounded-full"
-              style={{
-                left: `${STAGE_X[s] - 4}%`,
-                top: "44%",
-                width: "8%",
-                height: "10%",
-                background:
-                  on[s] && processing
-                    ? "radial-gradient(circle, rgba(255,230,120,0.55), rgba(255,200,80,0) 70%)"
-                    : "transparent",
-                animation: on[s] && processing ? "pulse 0.9s ease-in-out infinite" : undefined,
-                mixBlendMode: "screen",
-              }}
-            />
-          );
-        })}
+        {/* MIXER — spinning whisk */}
+        <div
+          className="pointer-events-none absolute flex items-center justify-center"
+          style={{ left: `${STAGE_X.mixer}%`, top: "48%", transform: "translate(-50%, -50%)" }}
+        >
+          <span className="block animate-[spin_0.8s_linear_infinite] text-2xl sm:text-4xl">🌀</span>
+        </div>
+        {/* mixer glow */}
+        <div
+          className="pointer-events-none absolute rounded-full"
+          style={{
+            left: `${STAGE_X.mixer - 4}%`,
+            top: "44%",
+            width: "8%",
+            height: "10%",
+            background: "radial-gradient(circle, rgba(255,182,193,0.55), rgba(255,182,193,0) 70%)",
+            mixBlendMode: "screen",
+            animation: "machinePulse 1.2s ease-in-out infinite",
+          }}
+        />
 
-        {/* Moving batches on belt */}
+        {/* BAKER — flame/heat shimmer + muffin */}
+        <div
+          className="pointer-events-none absolute flex items-center justify-center"
+          style={{ left: `${STAGE_X.baker}%`, top: "47%", transform: "translate(-50%, -50%)" }}
+        >
+          <span className="block animate-[bake_0.9s_ease-in-out_infinite] text-xl sm:text-3xl">🔥</span>
+        </div>
+        <div
+          className="pointer-events-none absolute rounded-md"
+          style={{
+            left: `${STAGE_X.baker - 5}%`,
+            top: "42%",
+            width: "10%",
+            height: "14%",
+            background: "radial-gradient(ellipse, rgba(255,170,80,0.6), rgba(255,120,40,0) 70%)",
+            mixBlendMode: "screen",
+            animation: "ovenPulse 1.1s ease-in-out infinite",
+          }}
+        />
+
+        {/* ICER — rotating cupcake getting iced */}
+        <div
+          className="pointer-events-none absolute"
+          style={{ left: `${STAGE_X.icer}%`, top: "50%", transform: "translate(-50%, -50%)" }}
+        >
+          <span className="inline-block animate-[spin_1.2s_linear_infinite] text-2xl sm:text-4xl">🧁</span>
+        </div>
+        {/* pink icing drip */}
+        <div
+          className="pointer-events-none absolute"
+          style={{ left: `${STAGE_X.icer}%`, top: "40%", width: "0", height: "0" }}
+        >
+          <div className="drip" style={{ animationDelay: "0s" }} />
+          <div className="drip" style={{ animationDelay: "0.5s" }} />
+          <div className="drip" style={{ animationDelay: "1s" }} />
+        </div>
+
+        {/* PACKER — gift box thumping */}
+        <div
+          className="pointer-events-none absolute"
+          style={{ left: `${STAGE_X.packer}%`, top: "48%", transform: "translate(-50%, -50%)" }}
+        >
+          <span className="inline-block animate-[pack_0.7s_ease-in-out_infinite] text-2xl sm:text-4xl">🎁</span>
+        </div>
+        {/* outgoing boxes drifting on the right belt */}
+        <div className="pointer-events-none absolute" style={{ left: "72%", top: "76%", width: "26%", height: "8%" }}>
+          <span className="absolute text-xl sm:text-2xl" style={{ animation: "shipOut 3s linear infinite" }}>📦</span>
+          <span className="absolute text-xl sm:text-2xl" style={{ animation: "shipOut 3s linear infinite", animationDelay: "1s" }}>📦</span>
+          <span className="absolute text-xl sm:text-2xl" style={{ animation: "shipOut 3s linear infinite", animationDelay: "2s" }}>📦</span>
+        </div>
+
+        {/* Batches moving on the main belt */}
         {batches
           .filter((b) => b.moving)
           .map((b) => (
@@ -225,46 +227,41 @@ function Index() {
             </div>
           ))}
 
-        {/* Toggle buttons under each machine */}
-        {STAGES.map((s) => (
-          <button
-            key={s}
-            onClick={() => setOn((p) => ({ ...p, [s]: !p[s] }))}
-            className="absolute flex items-center gap-1.5 rounded-md bg-black/80 px-2 py-1 text-[10px] font-bold text-white shadow-lg ring-1 ring-white/10 transition hover:scale-105 sm:text-xs"
-            style={{ left: `${STAGE_X[s]}%`, top: "61%", transform: "translateX(-50%)" }}
-          >
-            <span className="uppercase tracking-wider">{s}</span>
-            <span
-              className={`rounded px-1.5 py-0.5 text-[9px] sm:text-[10px] ${on[s] ? "bg-emerald-500 text-black" : "bg-red-500 text-white"}`}
-            >
-              {on[s] ? "ON" : "OFF"}
-            </span>
-          </button>
-        ))}
-
         <style>{`
-          @keyframes pulse {
-            0%,100% { opacity: 0.4; }
-            50%     { opacity: 1; }
+          @keyframes machinePulse { 0%,100% { opacity:.4 } 50% { opacity:1 } }
+          @keyframes ovenPulse { 0%,100% { opacity:.45 } 50% { opacity:.95 } }
+          @keyframes bake { 0%,100% { transform: scale(1) translateY(0) } 50% { transform: scale(1.15) translateY(-2px) } }
+          @keyframes pack { 0%,100% { transform: scale(1) rotate(-3deg) } 50% { transform: scale(1.1) rotate(3deg) } }
+          @keyframes shipOut {
+            0% { transform: translateX(0); opacity: 0 }
+            10% { opacity: 1 }
+            90% { opacity: 1 }
+            100% { transform: translateX(120%); opacity: 0 }
+          }
+          .drip {
+            position: absolute;
+            left: -4px;
+            top: 0;
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: #ff5fa2;
+            box-shadow: 0 0 6px rgba(255,95,162,0.7);
+            animation: drip 1.4s ease-in infinite;
+          }
+          @keyframes drip {
+            0% { transform: translateY(0) scale(0.6); opacity: 0 }
+            20% { opacity: 1 }
+            100% { transform: translateY(34px) scale(1); opacity: 0 }
           }
         `}</style>
       </div>
 
-      {/* HUD */}
-      <div className="grid w-full max-w-[1100px] grid-cols-2 gap-3 text-white sm:grid-cols-4">
-        <Stat label="Current Demand" value={`${produced} / ${Math.floor(demand)}`} accent="bg-amber-500/20 border-amber-400/40" />
-        <Stat label="Fill Rate" value={`${fillRate.toFixed(1)}%`} accent="bg-blue-500/20 border-blue-400/40" />
-        <Stat label="Revenue (Today)" value={`₹${revenue.toLocaleString()}`} accent="bg-emerald-500/20 border-emerald-400/40" />
-        <Stat
-          label="Status"
-          value={allOn ? "Running" : "Stalled"}
-          accent={allOn ? "bg-emerald-500/20 border-emerald-400/40" : "bg-red-500/20 border-red-400/40"}
-        />
+      <div className="grid w-full max-w-[1100px] grid-cols-2 gap-3 text-white sm:grid-cols-3">
+        <Stat label="Produced Today" value={produced.toLocaleString()} accent="bg-amber-500/20 border-amber-400/40" />
+        <Stat label="Revenue" value={`₹${revenue.toLocaleString()}`} accent="bg-emerald-500/20 border-emerald-400/40" />
+        <Stat label="Status" value="All systems running" accent="bg-blue-500/20 border-blue-400/40" />
       </div>
-
-      <p className="max-w-[1100px] text-center text-xs text-slate-400">
-        Tip: click any machine toggle to switch it OFF — the line will back up. Turn it back ON to resume production.
-      </p>
     </div>
   );
 }
@@ -273,21 +270,14 @@ function nextStage(s: Stage): Stage | null {
   const i = STAGES.indexOf(s);
   return i >= 0 && i < STAGES.length - 1 ? STAGES[i + 1] : null;
 }
-
 function batchEmoji(s: Stage) {
-  // What the batch looks like AS IT LEAVES this stage moving toward the next
   switch (s) {
-    case "mixer":
-      return "🥣"; // batter heading to baker
-    case "baker":
-      return "🧁"; // baked muffin heading to icer (use muffin)
-    case "icer":
-      return "🧁"; // iced cupcake heading to packer
-    case "packer":
-      return "📦"; // boxed, shipping out
+    case "mixer": return "🥣";
+    case "baker": return "🧁";
+    case "icer":  return "🧁";
+    case "packer":return "📦";
   }
 }
-
 function Stat({ label, value, accent }: { label: string; value: string; accent: string }) {
   return (
     <div className={`rounded-lg border px-3 py-2 ${accent}`}>
