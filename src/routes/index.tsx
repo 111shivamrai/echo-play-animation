@@ -153,25 +153,20 @@ function Index() {
           <span className="steam" style={{ animationDelay: "1.4s" }} />
         </div>
 
-        {/* ============ ICER — rotating plate + pink icing drip ============ */}
-        <svg className="pointer-events-none absolute" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet"
-             style={{ left: `${STAGE_X.icer - 7}%`, top: "44%", width: "14%", height: "16%" }}>
-          {/* rotating plate */}
-          <g style={{ transformOrigin: "50px 75px", animation: "spin 2.5s linear infinite" }}>
-            <ellipse cx="50" cy="75" rx="32" ry="8" fill="#ffffff" stroke="#cfd8dc" strokeWidth="1.5" />
-            <ellipse cx="50" cy="73" rx="32" ry="6" fill="#f5f5f5" />
-            {/* tick marks so rotation is visible */}
-            <circle cx="20" cy="73" r="1.5" fill="#b0bec5" />
-            <circle cx="80" cy="73" r="1.5" fill="#b0bec5" />
-            <circle cx="50" cy="68" r="1.5" fill="#b0bec5" />
-          </g>
-        </svg>
-        {/* icing nozzle drip */}
+        {/* ============ ICER — pink icing dripping onto the cupcake ============ */}
         <div className="pointer-events-none absolute" style={{ left: `${STAGE_X.icer}%`, top: "40%", width: 0, height: 0 }}>
           <span className="drip" style={{ animationDelay: "0s" }} />
-          <span className="drip" style={{ animationDelay: "0.45s" }} />
-          <span className="drip" style={{ animationDelay: "0.9s" }} />
+          <span className="drip" style={{ animationDelay: "0.4s" }} />
+          <span className="drip" style={{ animationDelay: "0.8s" }} />
         </div>
+        {/* subtle pink glow on the iced cupcake */}
+        <div className="pointer-events-none absolute rounded-full"
+             style={{
+               left: `${STAGE_X.icer - 3}%`, top: "48%", width: "6%", aspectRatio: "1/1",
+               background: "radial-gradient(circle, rgba(255,120,180,0.45), rgba(255,120,180,0) 70%)",
+               mixBlendMode: "screen", animation: "ovenPulse 1.2s ease-in-out infinite",
+             }} />
+
 
         {/* ============ PACKER — pressing plunger + boxes dropping ============ */}
         <svg className="pointer-events-none absolute" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet"
