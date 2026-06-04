@@ -104,22 +104,40 @@ function Index() {
           <div className="text-base font-bold tabular-nums sm:text-xl">{produced.toString().padStart(5, "0")}</div>
         </div>
 
-        {/* ============ MIXER — rotating whisk over the bowl ============ */}
-        <svg className="pointer-events-none absolute" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet"
-             style={{ left: `${STAGE_X.mixer - 6}%`, top: "38%", width: "12%", height: "18%" }}>
-          {/* batter ripples */}
-          <circle cx="50" cy="70" r="22" fill="#f4a4c0" opacity="0.0">
-            <animate attributeName="r" values="14;22;14" dur="1.6s" repeatCount="indefinite" />
-            <animate attributeName="opacity" values="0.4;0.05;0.4" dur="1.6s" repeatCount="indefinite" />
-          </circle>
-          {/* whisk wires rotating */}
-          <g style={{ transformOrigin: "50px 50px", animation: "spin 0.7s linear infinite" }}>
-            <ellipse cx="50" cy="55" rx="10" ry="18" fill="none" stroke="#cfd8dc" strokeWidth="2" />
-            <ellipse cx="50" cy="55" rx="10" ry="18" fill="none" stroke="#cfd8dc" strokeWidth="2" transform="rotate(60 50 55)" />
-            <ellipse cx="50" cy="55" rx="10" ry="18" fill="none" stroke="#cfd8dc" strokeWidth="2" transform="rotate(120 50 55)" />
-            <line x1="50" y1="10" x2="50" y2="38" stroke="#90a4ae" strokeWidth="3" />
-          </g>
-        </svg>
+        {/* ============ MIXER — swirling pink batter + rotating whisk ============ */}
+        <div className="pointer-events-none absolute"
+             style={{ left: `${STAGE_X.mixer - 5.5}%`, top: "44%", width: "11%", aspectRatio: "1/1" }}>
+          {/* Pink batter swirling in the bowl */}
+          <div className="absolute inset-0 overflow-hidden rounded-full"
+               style={{ top: "38%", height: "55%", borderRadius: "50%" }}>
+            <div className="absolute inset-0"
+                 style={{
+                   background:
+                     "radial-gradient(ellipse at center, #ff7fb0 0%, #f4699a 35%, #d94c82 70%, #b03468 100%)",
+                   animation: "spin 1.4s linear infinite",
+                   backgroundImage:
+                     "conic-gradient(from 0deg, #ff8fbb, #ec5f95, #ff8fbb, #d94c82, #ff8fbb)",
+                 }} />
+            {/* swirl highlight streak */}
+            <div className="absolute inset-0"
+                 style={{
+                   background:
+                     "conic-gradient(from 0deg, rgba(255,255,255,0.45) 0deg, transparent 40deg, transparent 360deg)",
+                   animation: "spin 1.4s linear infinite",
+                 }} />
+          </div>
+          {/* Whisk wires rotating above/in the batter */}
+          <svg viewBox="0 0 100 100" className="absolute inset-0 h-full w-full">
+            <g style={{ transformOrigin: "50px 60px", animation: "spin 0.35s linear infinite" }}>
+              <ellipse cx="50" cy="60" rx="11" ry="22" fill="none" stroke="#e8eef2" strokeWidth="2.2" />
+              <ellipse cx="50" cy="60" rx="11" ry="22" fill="none" stroke="#e8eef2" strokeWidth="2.2" transform="rotate(45 50 60)" />
+              <ellipse cx="50" cy="60" rx="11" ry="22" fill="none" stroke="#e8eef2" strokeWidth="2.2" transform="rotate(90 50 60)" />
+              <ellipse cx="50" cy="60" rx="11" ry="22" fill="none" stroke="#e8eef2" strokeWidth="2.2" transform="rotate(135 50 60)" />
+              <circle cx="50" cy="38" r="3.5" fill="#90a4ae" />
+            </g>
+          </svg>
+        </div>
+
 
         {/* ============ BAKER — flickering oven glow + steam from chimney ============ */}
         <div className="pointer-events-none absolute rounded-md"
