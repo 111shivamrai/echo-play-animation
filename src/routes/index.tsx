@@ -153,19 +153,13 @@ function Index() {
           <span className="steam" style={{ animationDelay: "1.4s" }} />
         </div>
 
-        {/* ============ ICER — pink icing dripping onto the cupcake ============ */}
+        {/* ============ ICER — pink icing drip only, no overlays ============ */}
         <div className="pointer-events-none absolute" style={{ left: `${STAGE_X.icer}%`, top: "40%", width: 0, height: 0 }}>
           <span className="drip" style={{ animationDelay: "0s" }} />
           <span className="drip" style={{ animationDelay: "0.4s" }} />
           <span className="drip" style={{ animationDelay: "0.8s" }} />
         </div>
-        {/* subtle pink glow on the iced cupcake */}
-        <div className="pointer-events-none absolute rounded-full"
-             style={{
-               left: `${STAGE_X.icer - 3}%`, top: "48%", width: "6%", aspectRatio: "1/1",
-               background: "radial-gradient(circle, rgba(255,120,180,0.45), rgba(255,120,180,0) 70%)",
-               mixBlendMode: "screen", animation: "ovenPulse 1.2s ease-in-out infinite",
-             }} />
+
 
 
         {/* ============ PACKER — pressing plunger + boxes dropping ============ */}
