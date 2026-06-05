@@ -110,27 +110,22 @@ function Index() {
           viewBox="0 0 40 40"
           preserveAspectRatio="xMidYMid meet"
           style={{
-            left: `${STAGE_X.mixer - 4}%`,
-            top: "44%",
-            width: "8%",
-            height: "10%",
-            transformOrigin: "50% 30%",
-            animation: "spin 1.1s linear infinite",
+            left: "9%",
+            top: "47%",
+            width: "7%",
+            height: "9%",
+            transformOrigin: "50% 35%",
+            animation: "spin 0.9s linear infinite",
           }}
         >
-          {/* whisk wires */}
-          <g stroke="#cfd8dc" strokeWidth="1.4" fill="none" strokeLinecap="round">
-            <path d="M20 6 C 10 14, 10 24, 20 30" />
-            <path d="M20 6 C 30 14, 30 24, 20 30" />
-            <path d="M20 6 C 14 14, 14 24, 20 30" />
-            <path d="M20 6 C 26 14, 26 24, 20 30" />
+          <g stroke="#e0e6ea" strokeWidth="2" fill="none" strokeLinecap="round">
+            <path d="M20 8 C 8 16, 8 28, 20 32" />
+            <path d="M20 8 C 32 16, 32 28, 20 32" />
+            <path d="M20 8 C 14 16, 14 28, 20 32" />
+            <path d="M20 8 C 26 16, 26 28, 20 32" />
           </g>
-          <rect x="18.5" y="2" width="3" height="6" fill="#90a4ae" rx="1" />
+          <rect x="18" y="2" width="4" height="7" fill="#90a4ae" stroke="#546e7a" strokeWidth="0.6" rx="1" />
         </svg>
-
-
-
-
 
         {/* ============ BAKER — flickering oven glow + steam from chimney ============ */}
         <div className="pointer-events-none absolute rounded-md"
@@ -139,29 +134,28 @@ function Index() {
                background: "radial-gradient(ellipse, rgba(255,170,80,0.65), rgba(255,120,40,0) 70%)",
                mixBlendMode: "screen", animation: "ovenPulse 0.9s ease-in-out infinite",
              }} />
-        {/* steam puffs from chimney */}
         <div className="pointer-events-none absolute" style={{ left: `${STAGE_X.baker + 1}%`, top: "14%", width: "2%", height: "20%" }}>
           <span className="steam" style={{ animationDelay: "0s" }} />
           <span className="steam" style={{ animationDelay: "0.7s" }} />
           <span className="steam" style={{ animationDelay: "1.4s" }} />
         </div>
 
-        {/* ============ ICER — continuous pink icing stream from cone to cupcake ============ */}
+        {/* ============ ICER — continuous pink icing stream from cone tip to cupcake ============ */}
         <div
           className="pointer-events-none absolute overflow-hidden"
           style={{
-            left: `${STAGE_X.icer - 0.6}%`,
-            top: "37%",
-            width: "1.4%",
-            height: "11%",
+            left: "60.3%",
+            top: "41%",
+            width: "1.6%",
+            height: "8%",
             background:
-              "linear-gradient(to bottom, #ff5fa2 0%, #ff7ab3 60%, #ff5fa2 100%)",
-            backgroundSize: "100% 30%",
+              "repeating-linear-gradient(to bottom, #ff5fa2 0px, #ff5fa2 6px, #ff8ec0 6px, #ff8ec0 12px)",
             borderRadius: "999px",
-            boxShadow: "0 0 6px rgba(255,95,162,0.65)",
-            animation: "icingFlow 0.45s linear infinite",
+            boxShadow: "0 0 6px rgba(255,95,162,0.7)",
+            animation: "icingFlow 0.4s linear infinite",
           }}
         />
+
 
 
 
@@ -216,7 +210,7 @@ function Index() {
           }
           @keyframes icingFlow {
             0%   { background-position: 0 0 }
-            100% { background-position: 0 30% }
+            100% { background-position: 0 12px }
           }
         `}</style>
       </div>
