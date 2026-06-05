@@ -104,7 +104,31 @@ function Index() {
           <div className="text-base font-bold tabular-nums sm:text-xl">{produced.toString().padStart(5, "0")}</div>
         </div>
 
-        {/* MIXER — overlay removed; original artwork shows through */}
+        {/* ============ MIXER — whisk rotating in pink batter bowl ============ */}
+        <svg
+          className="pointer-events-none absolute"
+          viewBox="0 0 40 40"
+          preserveAspectRatio="xMidYMid meet"
+          style={{
+            left: `${STAGE_X.mixer - 4}%`,
+            top: "44%",
+            width: "8%",
+            height: "10%",
+            transformOrigin: "50% 30%",
+            animation: "spin 1.1s linear infinite",
+          }}
+        >
+          {/* whisk wires */}
+          <g stroke="#cfd8dc" strokeWidth="1.4" fill="none" strokeLinecap="round">
+            <path d="M20 6 C 10 14, 10 24, 20 30" />
+            <path d="M20 6 C 30 14, 30 24, 20 30" />
+            <path d="M20 6 C 14 14, 14 24, 20 30" />
+            <path d="M20 6 C 26 14, 26 24, 20 30" />
+          </g>
+          <rect x="18.5" y="2" width="3" height="6" fill="#90a4ae" rx="1" />
+        </svg>
+
+
 
 
 
@@ -122,12 +146,22 @@ function Index() {
           <span className="steam" style={{ animationDelay: "1.4s" }} />
         </div>
 
-        {/* ============ ICER — pink icing drip only, no overlays ============ */}
-        <div className="pointer-events-none absolute" style={{ left: `${STAGE_X.icer}%`, top: "40%", width: 0, height: 0 }}>
-          <span className="drip" style={{ animationDelay: "0s" }} />
-          <span className="drip" style={{ animationDelay: "0.4s" }} />
-          <span className="drip" style={{ animationDelay: "0.8s" }} />
-        </div>
+        {/* ============ ICER — continuous pink icing stream from cone to cupcake ============ */}
+        <div
+          className="pointer-events-none absolute overflow-hidden"
+          style={{
+            left: `${STAGE_X.icer - 0.6}%`,
+            top: "37%",
+            width: "1.4%",
+            height: "11%",
+            background:
+              "linear-gradient(to bottom, #ff5fa2 0%, #ff7ab3 60%, #ff5fa2 100%)",
+            backgroundSize: "100% 30%",
+            borderRadius: "999px",
+            boxShadow: "0 0 6px rgba(255,95,162,0.65)",
+            animation: "icingFlow 0.45s linear infinite",
+          }}
+        />
 
 
 
@@ -180,16 +214,9 @@ function Index() {
             20%  { opacity: 0.85 }
             100% { transform: translate(-10px,-70px) scale(1.7); opacity: 0 }
           }
-          .drip {
-            position: absolute; left: -4px; top: 0;
-            width: 8px; height: 8px; border-radius: 50%;
-            background: #ff5fa2; box-shadow: 0 0 6px rgba(255,95,162,0.7);
-            animation: drip 1.3s ease-in infinite;
-          }
-          @keyframes drip {
-            0%   { transform: translateY(0) scale(0.6); opacity: 0 }
-            20%  { opacity: 1 }
-            100% { transform: translateY(38px) scale(1); opacity: 0 }
+          @keyframes icingFlow {
+            0%   { background-position: 0 0 }
+            100% { background-position: 0 30% }
           }
         `}</style>
       </div>
