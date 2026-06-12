@@ -190,11 +190,6 @@ function Index() {
         `}</style>
       </div>
 
-      <div className="grid w-full max-w-[1100px] grid-cols-2 gap-3 text-white sm:grid-cols-3">
-        <Stat label="Produced Today" value={produced.toLocaleString()} accent="bg-amber-500/20 border-amber-400/40" />
-        <Stat label="Revenue" value={`₹${revenue.toLocaleString()}`} accent="bg-emerald-500/20 border-emerald-400/40" />
-        <Stat label="Status" value="All systems running" accent="bg-blue-500/20 border-blue-400/40" />
-      </div>
     </div>
   );
 }
