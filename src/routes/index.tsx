@@ -90,43 +90,7 @@ function Index() {
       >
         <img src={factoryAsset.url} alt="Factory floor" className="absolute inset-0 h-full w-full select-none" draggable={false} />
 
-        {/* Status pill */}
-        <div className="absolute flex items-center gap-1.5 rounded-full bg-black/55 px-2 py-1 text-[10px] font-bold text-white sm:text-xs"
-             style={{ right: "2%", top: "2.5%" }}>
-          <span className="h-2 w-2 animate-pulse rounded-full bg-green-400 shadow-[0_0_8px_2px_rgba(74,222,128,0.7)]" />
-          ALL SYSTEMS NORMAL
-        </div>
-
-        {/* Production counter */}
-        <div className="absolute rounded-md bg-emerald-900/85 px-2 py-1 text-right font-mono text-white shadow"
-             style={{ right: "2%", top: "12%", minWidth: "84px" }}>
-          <div className="text-[8px] leading-tight opacity-80 sm:text-[10px]">TODAY'S PRODUCTION</div>
-          <div className="text-base font-bold tabular-nums sm:text-xl">{produced.toString().padStart(5, "0")}</div>
-        </div>
-
-        {/* ============ MIXER — whisk rotating in pink batter bowl ============ */}
-        <svg
-          className="pointer-events-none absolute"
-          viewBox="0 0 40 40"
-          preserveAspectRatio="xMidYMid meet"
-          style={{
-            left: "13%",
-            top: "32%",
-            width: "5%",
-            height: "30%",
-            transformOrigin: "50% 30%",
-            animation: "spin 0.9s linear infinite",
-          }}
-        >
-          <g stroke="#e8eef2" strokeWidth="1.6" fill="none" strokeLinecap="round">
-            <path d="M20 10 C 10 18, 10 30, 20 34" />
-            <path d="M20 10 C 30 18, 30 30, 20 34" />
-            <path d="M20 10 C 15 18, 15 30, 20 34" />
-            <path d="M20 10 C 25 18, 25 30, 20 34" />
-          </g>
-        </svg>
-
-        {/* Batter ripple in bowl */}
+        {/* Batter ripple in bowl (mixer) */}
         <div
           className="pointer-events-none absolute rounded-full"
           style={{
@@ -226,11 +190,6 @@ function Index() {
         `}</style>
       </div>
 
-      <div className="grid w-full max-w-[1100px] grid-cols-2 gap-3 text-white sm:grid-cols-3">
-        <Stat label="Produced Today" value={produced.toLocaleString()} accent="bg-amber-500/20 border-amber-400/40" />
-        <Stat label="Revenue" value={`₹${revenue.toLocaleString()}`} accent="bg-emerald-500/20 border-emerald-400/40" />
-        <Stat label="Status" value="All systems running" accent="bg-blue-500/20 border-blue-400/40" />
-      </div>
     </div>
   );
 }
