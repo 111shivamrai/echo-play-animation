@@ -126,13 +126,25 @@ function Index() {
           <Box delay="2.4s" />
         </div>
 
-        {/* Batches moving on the main belt (SVG cupcakes / boxes) */}
-        {batches.filter((b) => b.moving).map((b) => (
-          <div key={b.id} className="pointer-events-none absolute"
-               style={{ left: `${b.beltX}%`, top: "82%", transform: "translate(-50%, -50%)", width: "4%", aspectRatio: "1/1" }}>
-            {b.stage === "packer" ? <BoxSVG /> : <CupcakeSVG iced={b.stage === "icer"} />}
+        {/* Continuously scrolling muffins along the main belt */}
+        <div
+          className="pointer-events-none absolute overflow-hidden"
+          style={{ left: "4%", top: "78%", width: "84%", height: "16%" }}
+        >
+          <div
+            className="absolute inset-0 flex items-center"
+            style={{ width: "200%", animation: "beltScroll 9s linear infinite" }}
+          >
+            {Array.from({ length: 16 }).map((_, i) => (
+              <div key={i} style={{ flex: "0 0 12.5%", display: "flex", justifyContent: "center" }}>
+                <div style={{ width: "45%", aspectRatio: "1/1" }}>
+                  <CupcakeSVG iced={i % 4 === 3} />
+                </div>
+              </div>
+            ))}
           </div>
-        ))}
+        </div>
+
 
         <style>{`
           @keyframes spin { from { transform: rotate(0) } to { transform: rotate(360deg) } }
