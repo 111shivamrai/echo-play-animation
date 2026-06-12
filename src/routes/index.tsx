@@ -174,6 +174,11 @@ function Index() {
             0%   { background-position: 0 0 }
             100% { background-position: 0 12px }
           }
+          @keyframes beltScroll {
+            0%   { transform: translateX(0) }
+            100% { transform: translateX(-50%) }
+          }
+
         `}</style>
       </div>
 
