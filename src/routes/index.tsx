@@ -85,8 +85,8 @@ function Index() {
   return (
     <div className="flex min-h-screen flex-col items-center justify-center gap-4 bg-slate-900 p-4">
       <div
-        className="relative w-full max-w-[1100px] overflow-hidden rounded-2xl shadow-2xl"
-        style={{ aspectRatio: "744 / 496" }}
+        className="relative w-full max-w-[1400px] overflow-hidden rounded-2xl shadow-2xl"
+        style={{ aspectRatio: "1584 / 552" }}
       >
         <img src={factoryAsset.url} alt="Factory floor" className="absolute inset-0 h-full w-full select-none" draggable={false} />
 
@@ -99,7 +99,7 @@ function Index() {
 
         {/* Production counter */}
         <div className="absolute rounded-md bg-emerald-900/85 px-2 py-1 text-right font-mono text-white shadow"
-             style={{ right: "2%", top: "9%", minWidth: "84px" }}>
+             style={{ right: "2%", top: "12%", minWidth: "84px" }}>
           <div className="text-[8px] leading-tight opacity-80 sm:text-[10px]">TODAY'S PRODUCTION</div>
           <div className="text-base font-bold tabular-nums sm:text-xl">{produced.toString().padStart(5, "0")}</div>
         </div>
@@ -110,31 +110,40 @@ function Index() {
           viewBox="0 0 40 40"
           preserveAspectRatio="xMidYMid meet"
           style={{
-            left: "9%",
-            top: "47%",
-            width: "7%",
-            height: "9%",
-            transformOrigin: "50% 35%",
+            left: "13%",
+            top: "32%",
+            width: "5%",
+            height: "30%",
+            transformOrigin: "50% 30%",
             animation: "spin 0.9s linear infinite",
           }}
         >
-          <g stroke="#e0e6ea" strokeWidth="2" fill="none" strokeLinecap="round">
-            <path d="M20 8 C 8 16, 8 28, 20 32" />
-            <path d="M20 8 C 32 16, 32 28, 20 32" />
-            <path d="M20 8 C 14 16, 14 28, 20 32" />
-            <path d="M20 8 C 26 16, 26 28, 20 32" />
+          <g stroke="#e8eef2" strokeWidth="1.6" fill="none" strokeLinecap="round">
+            <path d="M20 10 C 10 18, 10 30, 20 34" />
+            <path d="M20 10 C 30 18, 30 30, 20 34" />
+            <path d="M20 10 C 15 18, 15 30, 20 34" />
+            <path d="M20 10 C 25 18, 25 30, 20 34" />
           </g>
-          <rect x="18" y="2" width="4" height="7" fill="#90a4ae" stroke="#546e7a" strokeWidth="0.6" rx="1" />
         </svg>
+
+        {/* Batter ripple in bowl */}
+        <div
+          className="pointer-events-none absolute rounded-full"
+          style={{
+            left: "12%", top: "60%", width: "7%", height: "5%",
+            background: "radial-gradient(ellipse, rgba(255,120,160,0.5), rgba(255,120,160,0) 70%)",
+            animation: "ovenPulse 0.6s ease-in-out infinite",
+          }}
+        />
 
         {/* ============ BAKER — flickering oven glow + steam from chimney ============ */}
         <div className="pointer-events-none absolute rounded-md"
              style={{
-               left: `${STAGE_X.baker - 5.5}%`, top: "42%", width: "11%", height: "15%",
-               background: "radial-gradient(ellipse, rgba(255,170,80,0.65), rgba(255,120,40,0) 70%)",
+               left: `${STAGE_X.baker - 5}%`, top: "38%", width: "10%", height: "22%",
+               background: "radial-gradient(ellipse, rgba(255,170,80,0.6), rgba(255,120,40,0) 70%)",
                mixBlendMode: "screen", animation: "ovenPulse 0.9s ease-in-out infinite",
              }} />
-        <div className="pointer-events-none absolute" style={{ left: `${STAGE_X.baker + 1}%`, top: "14%", width: "2%", height: "20%" }}>
+        <div className="pointer-events-none absolute" style={{ left: `${STAGE_X.baker - 0.5}%`, top: "0%", width: "2%", height: "20%" }}>
           <span className="steam" style={{ animationDelay: "0s" }} />
           <span className="steam" style={{ animationDelay: "0.7s" }} />
           <span className="steam" style={{ animationDelay: "1.4s" }} />
@@ -144,30 +153,32 @@ function Index() {
         <div
           className="pointer-events-none absolute overflow-hidden"
           style={{
-            left: "60.3%",
-            top: "41%",
-            width: "1.6%",
-            height: "8%",
+            left: "63.6%",
+            top: "44%",
+            width: "1.2%",
+            height: "12%",
             background:
               "repeating-linear-gradient(to bottom, #ff5fa2 0px, #ff5fa2 6px, #ff8ec0 6px, #ff8ec0 12px)",
             borderRadius: "999px",
             boxShadow: "0 0 6px rgba(255,95,162,0.7)",
-            animation: "icingFlow 0.4s linear infinite",
+            animation: "icingFlow 0.35s linear infinite",
           }}
         />
 
+        {/* Packer chimney steam */}
+        <div className="pointer-events-none absolute" style={{ left: `${STAGE_X.packer - 0.5}%`, top: "0%", width: "2%", height: "20%" }}>
+          <span className="steam" style={{ animationDelay: "0.3s" }} />
+          <span className="steam" style={{ animationDelay: "1.1s" }} />
+        </div>
 
+        {/* ============ PACKER — pressing plunger glow ============ */}
+        <div className="pointer-events-none absolute rounded-md"
+             style={{
+               left: `${STAGE_X.packer - 4}%`, top: "38%", width: "8%", height: "22%",
+               background: "radial-gradient(ellipse, rgba(255,200,220,0.55), rgba(255,200,220,0) 70%)",
+               mixBlendMode: "screen", animation: "press 0.9s ease-in-out infinite",
+             }} />
 
-
-        {/* ============ PACKER — pressing plunger + boxes dropping ============ */}
-        <svg className="pointer-events-none absolute" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid meet"
-             style={{ left: `${STAGE_X.packer - 6}%`, top: "38%", width: "12%", height: "20%" }}>
-          {/* plunger goes down/up */}
-          <g style={{ animation: "press 0.9s ease-in-out infinite" }}>
-            <rect x="42" y="10" width="16" height="30" fill="#90a4ae" stroke="#546e7a" strokeWidth="1.5" rx="2" />
-            <rect x="38" y="38" width="24" height="6" fill="#455a64" rx="1" />
-          </g>
-        </svg>
 
         {/* Outgoing boxes drifting along right belt */}
         <div className="pointer-events-none absolute overflow-hidden" style={{ left: "72%", top: "70%", width: "26%", height: "14%" }}>
