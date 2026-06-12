@@ -181,16 +181,16 @@ function Index() {
 
 
         {/* Outgoing boxes drifting along right belt */}
-        <div className="pointer-events-none absolute overflow-hidden" style={{ left: "72%", top: "70%", width: "26%", height: "14%" }}>
+        <div className="pointer-events-none absolute overflow-hidden" style={{ left: "88%", top: "76%", width: "12%", height: "16%" }}>
           <Box delay="0s" />
-          <Box delay="1s" />
-          <Box delay="2s" />
+          <Box delay="1.2s" />
+          <Box delay="2.4s" />
         </div>
 
         {/* Batches moving on the main belt (SVG cupcakes / boxes) */}
         {batches.filter((b) => b.moving).map((b) => (
           <div key={b.id} className="pointer-events-none absolute"
-               style={{ left: `${b.beltX}%`, top: "76%", transform: "translate(-50%, -50%)", width: "5%", aspectRatio: "1/1" }}>
+               style={{ left: `${b.beltX}%`, top: "82%", transform: "translate(-50%, -50%)", width: "4%", aspectRatio: "1/1" }}>
             {b.stage === "packer" ? <BoxSVG /> : <CupcakeSVG iced={b.stage === "icer"} />}
           </div>
         ))}
