@@ -135,10 +135,10 @@ function Index() {
             className="absolute inset-0 flex items-center"
             style={{ width: "200%", animation: "beltScroll 9s linear infinite" }}
           >
-            {Array.from({ length: 16 }).map((_, i) => (
-              <div key={i} style={{ flex: "0 0 12.5%", display: "flex", justifyContent: "center" }}>
-                <div style={{ width: "45%", aspectRatio: "1/1" }}>
-                  <CupcakeSVG iced={i % 4 === 3} />
+            {Array.from({ length: 20 }).map((_, i) => (
+              <div key={i} style={{ flex: "0 0 10%", display: "flex", justifyContent: "center", alignItems: "flex-end" }}>
+                <div style={{ width: "80%", aspectRatio: "1/1" }}>
+                  <CupcakeSVG iced={i % 5 === 4} />
                 </div>
               </div>
             ))}
