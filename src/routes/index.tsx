@@ -90,16 +90,6 @@ function Index() {
       >
         <img src={factoryAsset.url} alt="Factory floor" className="absolute inset-0 h-full w-full select-none" draggable={false} />
 
-        {/* Batter ripple in bowl (mixer) */}
-        <div
-          className="pointer-events-none absolute rounded-full"
-          style={{
-            left: "12%", top: "60%", width: "7%", height: "5%",
-            background: "radial-gradient(ellipse, rgba(255,120,160,0.5), rgba(255,120,160,0) 70%)",
-            animation: "ovenPulse 0.6s ease-in-out infinite",
-          }}
-        />
-
         {/* ============ BAKER — flickering oven glow + steam from chimney ============ */}
         <div className="pointer-events-none absolute rounded-md"
              style={{
@@ -113,21 +103,6 @@ function Index() {
           <span className="steam" style={{ animationDelay: "1.4s" }} />
         </div>
 
-        {/* ============ ICER — continuous pink icing stream from cone tip to cupcake ============ */}
-        <div
-          className="pointer-events-none absolute overflow-hidden"
-          style={{
-            left: "63.6%",
-            top: "44%",
-            width: "1.2%",
-            height: "12%",
-            background:
-              "repeating-linear-gradient(to bottom, #ff5fa2 0px, #ff5fa2 6px, #ff8ec0 6px, #ff8ec0 12px)",
-            borderRadius: "999px",
-            boxShadow: "0 0 6px rgba(255,95,162,0.7)",
-            animation: "icingFlow 0.35s linear infinite",
-          }}
-        />
 
         {/* Packer chimney steam */}
         <div className="pointer-events-none absolute" style={{ left: `${STAGE_X.packer - 0.5}%`, top: "0%", width: "2%", height: "20%" }}>
