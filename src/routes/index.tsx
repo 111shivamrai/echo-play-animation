@@ -14,7 +14,7 @@ export const Route = createFileRoute("/")({
 
 type Stage = "mixer" | "baker" | "icer" | "packer";
 const STAGES: Stage[] = ["mixer", "baker", "icer", "packer"];
-const STAGE_X: Record<Stage, number> = { mixer: 14, baker: 30, icer: 50, packer: 66 };
+const STAGE_X: Record<Stage, number> = { mixer: 15, baker: 43, icer: 64, packer: 83 };
 const STAGE_TIME = 1500;
 const PRICE = 12;
 
