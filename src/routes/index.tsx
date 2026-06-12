@@ -129,7 +129,7 @@ function Index() {
         {/* Continuously scrolling muffins along the main belt */}
         <div
           className="pointer-events-none absolute overflow-hidden"
-          style={{ left: "4%", top: "78%", width: "84%", height: "16%" }}
+          style={{ left: "4%", top: "68%", width: "84%", height: "22%" }}
         >
           <div
             className="absolute inset-0 flex items-center"
