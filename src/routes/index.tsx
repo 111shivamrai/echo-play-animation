@@ -90,42 +90,6 @@ function Index() {
       >
         <img src={factoryAsset.url} alt="Factory floor" className="absolute inset-0 h-full w-full select-none" draggable={false} />
 
-        {/* ============ BAKER — flickering oven glow + steam from chimney ============ */}
-        <div className="pointer-events-none absolute rounded-md"
-             style={{
-               left: `${STAGE_X.baker - 5}%`, top: "38%", width: "10%", height: "22%",
-               background: "radial-gradient(ellipse, rgba(255,170,80,0.6), rgba(255,120,40,0) 70%)",
-               mixBlendMode: "screen", animation: "ovenPulse 0.9s ease-in-out infinite",
-             }} />
-        <div className="pointer-events-none absolute" style={{ left: `${STAGE_X.baker - 0.5}%`, top: "0%", width: "2%", height: "20%" }}>
-          <span className="steam" style={{ animationDelay: "0s" }} />
-          <span className="steam" style={{ animationDelay: "0.7s" }} />
-          <span className="steam" style={{ animationDelay: "1.4s" }} />
-        </div>
-
-
-        {/* Packer chimney steam */}
-        <div className="pointer-events-none absolute" style={{ left: `${STAGE_X.packer - 0.5}%`, top: "0%", width: "2%", height: "20%" }}>
-          <span className="steam" style={{ animationDelay: "0.3s" }} />
-          <span className="steam" style={{ animationDelay: "1.1s" }} />
-        </div>
-
-        {/* ============ PACKER — pressing plunger glow ============ */}
-        <div className="pointer-events-none absolute rounded-md"
-             style={{
-               left: `${STAGE_X.packer - 4}%`, top: "38%", width: "8%", height: "22%",
-               background: "radial-gradient(ellipse, rgba(255,200,220,0.55), rgba(255,200,220,0) 70%)",
-               mixBlendMode: "screen", animation: "press 0.9s ease-in-out infinite",
-             }} />
-
-
-        {/* Outgoing boxes drifting along right belt */}
-        <div className="pointer-events-none absolute overflow-hidden" style={{ left: "88%", top: "76%", width: "12%", height: "16%" }}>
-          <Box delay="0s" />
-          <Box delay="1.2s" />
-          <Box delay="2.4s" />
-        </div>
-
         {/* Continuously scrolling muffins along the main belt */}
         <div
           className="pointer-events-none absolute overflow-hidden"
@@ -144,6 +108,8 @@ function Index() {
             ))}
           </div>
         </div>
+
+
 
 
         <style>{`
